@@ -2,7 +2,7 @@
 require 'vendor/autoload.php';
 
 // Connect to MongoDB
-$client = new MongoDB\Client("mongodb://localhost:27017");
+$client = new MongoDB\Client($_ENV['MONGODB_URI']);
 
 // Select database + collection
 $collection = $client->stocks->companies;
