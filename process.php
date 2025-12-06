@@ -5,7 +5,7 @@ require 'vendor/autoload.php';
 $client = new MongoDB\Client($_ENV['MONGODB_URI']);
 
 // Select database + collection
-$collection = $client->stocks->companies;
+$collection = $client->Stock->PublicCompanies;
 
 // Read form data
 $searchType = $_GET['searchType'];     
