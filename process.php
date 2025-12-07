@@ -24,7 +24,7 @@ if (!$searchType || !$searchInput) {
 if ($searchType === "ticker") {
     $filter = ['ticker' => $searchInput];
 } else {
-    $filter = ['company' => $searchInput];
+    $filter = ['name' => $searchInput];
 }
 
 try {
@@ -42,7 +42,7 @@ if (count($docs) === 0) {
 
 foreach ($docs as $doc) {
     echo "<p>";
-    echo "Company: " . htmlspecialchars($doc['company']) . "<br>";
+    echo "Company: " . htmlspecialchars($doc['name']) . "<br>";
     echo "Ticker: " . htmlspecialchars($doc['ticker']) . "<br>";
     echo "Price: $" . htmlspecialchars($doc['price']) . "<br>";
     echo "</p>";
