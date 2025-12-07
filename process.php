@@ -46,5 +46,18 @@ foreach ($docs as $doc) {
     echo "Ticker: " . htmlspecialchars($doc['ticker']) . "<br>";
     echo "Price: $" . htmlspecialchars($doc['price']) . "<br>";
     echo "</p>";
+    console.log($doc);
 }
+
+$results = $collection->find($filter);
+$docs = iterator_to_array($results);
+
+foreach ($docs as $doc) {
+    error_log("----- MongoDB Result -----");
+    error_log("Company: " . ($doc['company'] ?? 'N/A'));
+    error_log("Ticker: " . ($doc['ticker'] ?? 'N/A'));
+    error_log("Price: " . ($doc['price'] ?? 'N/A'));
+}
+
+
 ?>
