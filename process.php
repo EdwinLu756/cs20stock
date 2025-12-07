@@ -1,41 +1,50 @@
 <?php
 require 'vendor/autoload.php';
 
-// Connect to MongoDB
-$client = new MongoDB\Client($_ENV['MONGODB_URI']);
+$mongoUri = getenv("MONGODB_URI");
+if (!$mongoUri) {
+    die("MongoDB URI not set");
+}
 
-// Select database + collection
+try {
+    $client = new MongoDB\Client($mongoUri);
+} catch (Exception $e) {
+    die("MongoDB connection failed: " . $e->getMessage());
+}
+
 $collection = $client->Stock->PublicCompanies;
 
-// Read form data
-$searchType = $_GET['searchType'];     
-$searchInput = $_GET['searchInput'];   
+$searchType = $_GET['searchType'] ?? null;
+$searchInput = $_GET['searchInput'] ?? null;
 
-// Build query
+if (!$searchType || !$searchInput) {
+    die("Missing search input");
+}
+
 if ($searchType === "ticker") {
     $filter = ['ticker' => $searchInput];
 } else {
     $filter = ['company' => $searchInput];
 }
 
-// Query MongoDB
-$results = $collection->find($filter);
-
-// Display results in the PHP console (Apache error log)
-foreach ($results as $doc) {
-    error_log("Company: " . $doc['company']);
-    error_log("Ticker: " . $doc['ticker']);
-    error_log("Price: " . $doc['price']);
+try {
+    $results = $collection->find($filter);
+    $docs = iterator_to_array($results);
+} catch (Exception $e) {
+    die("Query failed: " . $e->getMessage());
 }
 
-// Extra credit: show results on a web page
 echo "<h2>Search Results</h2>";
 
-foreach ($results as $doc) {
+if (count($docs) === 0) {
+    echo "<p>No results found.</p>";
+}
+
+foreach ($docs as $doc) {
     echo "<p>";
-    echo "Company: " . $doc['company'] . "<br>";
-    echo "Ticker: " . $doc['ticker'] . "<br>";
-    echo "Price: $" . $doc['price'] . "<br>";
+    echo "Company: " . htmlspecialchars($doc['company']) . "<br>";
+    echo "Ticker: " . htmlspecialchars($doc['ticker']) . "<br>";
+    echo "Price: $" . htmlspecialchars($doc['price']) . "<br>";
     echo "</p>";
 }
 ?>
