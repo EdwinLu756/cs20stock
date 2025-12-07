@@ -46,7 +46,6 @@ foreach ($docs as $doc) {
     echo "Ticker: " . htmlspecialchars($doc['ticker']) . "<br>";
     echo "Price: $" . htmlspecialchars($doc['price']) . "<br>";
     echo "</p>";
-    console.log($doc);
 }
 
 $results = $collection->find($filter);
